@@ -1,0 +1,126 @@
+{
+  "info": {
+    "name": "User Import API",
+    "description": "Collection for testing user import with random passwords and Mailtrap email",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Import Single User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"john_doe\",\n  \"email\": \"john@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/users/import/single",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "users", "import", "single"]
+        },
+        "description": "Create a single user with random 16-character password and send welcome email"
+      }
+    },
+    {
+      "name": "Import Multiple Users (JSON)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"users\": [\n    {\n      \"username\": \"alice123\",\n      \"email\": \"alice@company.com\"\n    },\n    {\n      \"username\": \"bob456\",\n      \"email\": \"bob@company.com\"\n    },\n    {\n      \"username\": \"charlie789\",\n      \"email\": \"charlie@company.com\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/users/import/json",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "users", "import", "json"]
+        },
+        "description": "Import multiple users from JSON array. Each user gets a unique random 16-character password."
+      }
+    },
+    {
+      "name": "Import from Excel File",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/path/to/users.xlsx"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/users/import/excel",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "users", "import", "excel"]
+        },
+        "description": "Upload Excel file with columns: username, email\nFormat: \n- Row 1: Headers (username, email)\n- Row 2+: User data"
+      }
+    },
+    {
+      "name": "Get All Users (Verify Import)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/users",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "users"]
+        },
+        "description": "Get all users to verify import was successful"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "your_jwt_token_here",
+      "type": "string",
+      "description": "Get this from /api/v1/auth/login with admin credentials"
+    }
+  ]
+}
